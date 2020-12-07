@@ -1067,7 +1067,7 @@ void Grid::Inital1DInvisBurgers()
 	for (int j = 0; j <= m_iMeshM + 1; j++)
 	{
 		x = j * m_dH;
-		pUj[j] = pU0j[j] = 1.5 + sin(2. * PI * x);  // 
+		pUj[j] = pU0j[j] = 0.+ sin(2. * PI * x);  //  1.5
 
 	}
 }
@@ -1085,9 +1085,13 @@ double Grid::Flux(int iL, int iR)
 	else if (pU0j[iL] < 0. && pU0j[iR] < 0.) return  0.5* pU0j[iR] * pU0j[iR];
 	else return 0.;*/
 
-	if ( pU0j[iL] > 0. ) dFlux =   0.5* pU0j[iL] * pU0j[iL];
-	if ( pU0j[iR] < 0.)  dFlux =  0.5* pU0j[iR] * pU0j[iR];
-	if ( pU0j[iL] < 0. && pU0j[iL] > 0.) dFlux = 0.;
+	double s;
+
+	s = 0.5*(pU0j[iL] + pU0j[iR]);
+
+	if ( pU0j[iL] > 0. && s >0.) dFlux =   0.5* pU0j[iL] * pU0j[iL];
+	if ( pU0j[iR] < 0. && s <0.)  dFlux =  0.5* pU0j[iR] * pU0j[iR];
+	if ( pU0j[iL] < 0. && pU0j[iR] > 0.) dFlux = 0.;
 	
 
 	return dFlux;
